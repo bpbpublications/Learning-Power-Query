@@ -1,0 +1,37 @@
+= Table.AddColumn(#"Changed Type", "Multiplication", each List.Product({[Quantity], [Price], [Discount]}), type number)
+
+= Table.AddColumn(#"Changed Type", "Total Price", each List.Product({[Quantity], [Price], 1-[Discount]}), type number)
+
+= Table.TransformColumns(#"Inserted Multiplication",{{"Total Price", each Number.Round(_, 2), type number}})
+
+Number.Round(List.Product({[Quantity], [Price], 1-[Discount]}), 2)
+
+= Table.AddColumn(#"Rounded Off", "Total Price 2", each Number.Round(List.Product({[Quantity], [Price], 1-[Discount]}), 2), type number)
+
+= Table.Group(#"Filtered Rows", {"List of people registered"}, {{"Number of classes", each Table.RowCount(_), Int64.Type}, {"Classes", each _, type table [Class ID=nullable number, Class Name=nullable text, Category=nullable text, List of people registered=nullable text]}})
+
+= Table.Group(#"Filtered Rows", {"List of people registered"}, {{"Number of classes", each Table.RowCount(_), Int64.Type}, {"Classes", each [Class Name], type list}})
+
+Number.Round(List.Product({[Quantity], [Price], 1-[Discount]}), 2)
+
+Text.Combine({Text.Upper([First name]), " ", [Last Name], "; year of birth 1977"})
+
+Text.Combine({Text.Upper([First name]), " ", [Last Name], "; year of birth " Date.ToText([Date of Birth], "yyyy")})
+
+Text.Combine({Text.Upper([First name]), " ", [Last Name], "; year of birth ", Date.ToText([Date of Birth], "yyyy"), ", ", Date.ToText([Date of Birth], "dddd")})
+
+=Text.Combine({Text.Upper([First name]), " ", [Last Name], "; year of birth ", Date.ToText([Date of Birth], "yyyy, dddd")})
+
+Text.Combine({Text.Upper([Last Name]), ", ", Text.Start([Email], 2)})
+
+Text.Combine({Text.Upper([Last Name]), ", ", Text.Start([First name], 1), "."})
+
+Number.From([Work Time])
+
+Number.RoundDown(24 * 4 * Number.From([Work Time]))
+
+Number.RoundDown(24 * 4 * Number.From([Work Time]))/96
+
+Time.From(Number.RoundDown(24 * 4 * Number.From([Work Time]))/96)
+
+

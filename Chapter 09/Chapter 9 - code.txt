@@ -1,0 +1,88 @@
+= Table.SelectRows(Source, each [Extension] = ".xlsx")
+
+= #"Filtered Rows"{0}[Content]
+
+= #"Filtered Rows"{[#"Folder Path"="D:\BPB\Chapter 9\Sales\", Name="Italy.xlsx"]}[Content]
+
+= Table.ExpandTableColumn(#"Removed Other Columns1", "Transform File", Table.ColumnNames(#"Transform File"(#"Sample File")))
+
+= (Parameter1) => let
+Source = Excel.Workbook(Parameter1, null, true),
+Sheet1_Sheet = Source{[Item="Sheet1",Kind="Sheet"]}[Data],
+#"Promoted Headers" = Table.PromoteHeaders(Sheet1_Sheet, [PromoteAllScalars=true])
+in
+#"Promoted Headers"
+
+= Table.AddColumn(Sheet1_Sheet, "Salesperson", each if Text.StartsWith([Column1], "Salesperson") then Text.AfterDelimiter([Column1], " ") else null, type text)
+
+= Table.UnpivotOtherColumns(#"Removed Top Rows", {"Product", "Salesperson"}, "Month", "Profit")
+
+= Table.RenameColumns(#"Invoke Custom Function1", {"Name", "Country"})
+
+= Table.SelectColumns(#"Renamed Columns1", {"Country", "Transform File"})
+
+https://coinmarketcap.com/historical
+
+= Table.TransformColumnTypes(#"Promoted Headers",{{"Rank", Int64.Type}, {"Name", type text}, {"Symbol", type text}, {"Market Cap", Currency.Type}, {"Price", Currency.Type}, {"Circulating Supply", type text}, {"volume (24h)", Currency.Type}, {"% 1h", type text}, {"% 24h", Percentage.Type}, {"% 7d", type text}})
+
+= Table.TransformColumnTypes(#"Promoted Headers",{{"Rank", Int64.Type}, {"Name", type text}, {"Symbol", type text}, {"Market Cap", Currency.Type}, {"Price", Currency.Type}, {"Circulating Supply", type text}, {"volume (24h)", Currency.Type}})  
+
+= Table.ReplaceValue(#"Removed Columns","BTC","",Replacer.ReplaceText,{"Name"})
+
+= Table.ReplaceValue(#"Removed Columns",each [Symbol], "", Replacer.ReplaceText, {"Name"})
+
+= Table.TransformColumns(#"Removed Columns", {{"Name", each Text.AfterDelimiter(_, "BTC"), type text}})
+
+= Table.TransformColumns(#"Removed Columns", {{"Name", each Text.AfterDelimiter(_, each [Symbol]), type text}})
+
+= Table.AddColumn(#"Removed Columns", "Text After Delimiter", each Text.AfterDelimiter([Name], "BTC"), type text)
+
+= Table.AddColumn(#"Removed Columns", "Name only", each Text.AfterDelimiter([Name], [Symbol]), type text)
+
+= SinglePDFImport("D:\BPB\Chapter 9\PDFs\Crypto_Archive_20250427.pdf")
+
+https://excelguru.ca/clean-whitespace-in-powerquery/
+
+(text_to_trim as text, optional char_to_trim as text) as text =>
+let
+    delimiter = if char_to_trim = null then " " else char_to_trim,
+    split = Text.Split(text_to_trim, delimiter),
+    removeblanks = List.Select(split, each _ <> ""),
+    result = Text.Combine(removeblanks, char)
+in
+    result
+
+() => 
+
+= List.Select(#"Split Text", each _ <> "")
+
+let
+    Source = "  Hanna    has a    Cat,  ",
+    #"Split Text" = Text.Split(Source, " "),
+    without_empty = List.Select(#"Split Text", each _ <> "")
+in
+    without_empty
+
+let
+    Source = "  Hanna    has a    Cat,  ",
+    #"Split Text" = Text.Split(Source, " "),
+    without_empty = List.Select(#"Split Text", each _ <> ""),
+    Result = Text.Combine(without_empty, " ")
+in
+    Result
+
+(text_to_trim as text, optional char_to_trim as text) as text =>
+
+Source = "  Hanna    has a    Cat,  ",
+
+Delimiter = if char_to_trim = null then " " else char_to_trim,
+
+(text_to_trim as text, optional char_to_trim as text) as text =>
+let
+    delimiter = if char_to_trim = null then " " else char_to_trim,
+    #"Split Text" = Text.Split(text_to_trim, delimiter),
+    without_empty = List.Select(#"Split Text", each _ <> ""),
+    Result = Text.Combine(without_empty, delimiter)
+in
+    Result
+

@@ -1,0 +1,29 @@
+= Table.UnpivotOtherColumns(#"Filled Down", {"Salesman", "Product"}, "Attribute", "Value")
+
+= Table.Unpivot(#"Filled Down", {"January", "February", "March"}, "Attribute", "Value")
+
+= Table.Unpivot(#"Filled Down", {"January", "February", "March"}, "Month", "Revenue")
+
+= Table.ReplaceValue(#"Changed Type",null,0,Replacer.ReplaceValue,{"Sep Hours", "Oct Hours", "Sep Costs", "Oct Costs"})
+
+= Table.ReplaceValue(#"Changed Type",null,"",Replacer.ReplaceValue,{"Sep Hours", "Oct Hours", "Sep Costs", "Oct Costs"})
+
+= Table.SplitColumn(#"Unpivoted Other Columns", "Attribute", Splitter.SplitTextByDelimiter(" ", QuoteStyle.Csv), {"Attribute.1", "Attribute.2"})
+
+= Table.SplitColumn(#"Unpivoted Other Columns", "Attribute", Splitter.SplitTextByDelimiter(" ", QuoteStyle.Csv), {"Month", "Attribute.2"})
+
+= Table.SplitColumn(#"Unpivoted Other Columns", "Attribute", Splitter.SplitTextByPositions({0, 3}, false), {"Attribute.1", "Attribute.2"})
+
+= Table.SplitColumn(#"Unpivoted Other Columns", "Attribute", Splitter.SplitTextByPositions({0, 3}, false), {"Month", "Attribute.2"})
+
+= Table.SplitColumn(#"Unpivoted Other Columns", "Attribute", Splitter.SplitTextByCharacterTransition({"a".."z"}, {"A".."Z"}), {"Attribute.1", "Attribute.2"})
+
+= Table.SelectRows(#"Changed Type", each [#"Parametr/Column name"] <> null and [#"Parametr/Column name"] <> "")
+
+= Table.SelectRows(#"Changed Type", each ([#"Parametr/Column name"] <> null and [#"Parametr/Column name"] <> "" and [#"Parametr/Column name"] <> "Sum:"))
+
+code:
+= Table.SplitColumn(#"Unpivoted Other Columns", "Attribute", Splitter.SplitTextByCharacterTransition((c) => not List.Contains({"0".."9"}, c), {"0".."9"}), {"Attribute.1", "Attribute.2"})
+
+= Table.SplitColumn(#"Unpivoted Other Columns", "Attribute", Splitter.SplitTextByCharacterTransition((c) => not List.Contains({"0".."9"}, c), {"0".."9"}), {"Attribute.1"})
+

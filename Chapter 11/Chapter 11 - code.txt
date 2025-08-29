@@ -1,0 +1,25 @@
+= Table.FromRecords(List.Combine(Matches))
+
+if [Amount] > 1000 then "High" else "Low"
+
+= Source{[Product="Train"]}[Column]
+
+Sub MeasureRefreshTime()
+    Dim t0 As Double
+    t0 = Timer
+    Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
+    MsgBox "Elapsed time: " & Timer - t0 & " seconds"
+End Sub
+
+Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
+
+ActiveWorkbook.Connections("Query - tFiles").Refresh
+
+let
+    Players = Excel.CurrentWorkbook(){[Name="tPlayers"]}[Content][Name],
+    Indexes = List.Positions(Players),
+    Matches = List.Transform(Indexes, (i) => List.Transform( List.Range(Indexes, i + 1, List.Count(Indexes) - i - 1),(j) => [Player1=Players{i}, Player2=Players{j}])),
+    AllMatches = Table.FromRecords(List.Combine(Matches))
+in
+    AllMatches
+

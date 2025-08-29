@@ -1,0 +1,116 @@
+List.Sum(List.Range(#"Added Index"[Quantity],0,[Index]))
+
+= Table.AddColumn(#"Added Index", "Total", each List.Range(#"Added Index"[Quantity],0,[Index]))
+
+= Table.AddColumn(#"Added Index", "Total", each List.Sum(List.Range(#"Added Index"[Quantity],0,[Index])), Int64.Type)
+
+= Table.Sort(#"Changed Type",{{"Month", Order.Ascending}, {"Year", Order.Ascending}})
+
+List.PositionOf(list as list, value as any, optional occurrence as nullable number, optional equationCriteria as any) as any
+
+List.PositionOf({"January", "february", "March", "April", "May", "June"},[Month])
+
+List.PositionOf({"January", "february", "March", "April", "May", "June"},[Month],1,Comparer.OrdinalIgnoreCase)
+
+= Table.Sort(#"Changed Type",{{each List.PositionOf({"January", "february", "March", "April", "May", "June"},[Month],1,Comparer.OrdinalIgnoreCase), Order.Ascending}, {"Year", Order.Ascending}})
+
+= Table.Group(#"Changed Type", {"Merchant"}, {{"Avg. Sales", each List.Average([Sales]), type nullable number}})
+
+= Table.Group(#"Calculated Average", {"Merchant"}, {{"Avg. Sales", each List.Average([Sales]), type nullable number}})
+
+let
+    Source = Excel.CurrentWorkbook(){[Name="tAvg"]}[Content],
+    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Month", type text}, {"Merchant", type text}, {"Sales", Int64.Type}}),
+    #"Calculated Average" = List.Average(#"Changed Type"[Sales]),
+    #"Grouped Rows" = Table.Group(#"Changed Type", {"Merchant"}, {{"Avg. Sales", each List.Average([Sales]), type nullable number}})
+in
+    #"Grouped Rows"
+
+= Table.AddColumn(#"Grouped Rows", "% Avg.", each #"Calculated Average")
+
+= Table.AddColumn(#"Grouped Rows", "% Avg.", each [Avg. Sales]/#"Calculated Average", Percentage.Type)
+
+= Table.RenameColumns(#"Invoke Custom Function1",{{"Name", "Source.Name"}})
+
+= Table.SelectColumns(#"Invoke Custom Function1", {"Source.Name", "Transform File"})
+
+= Table.SelectColumns(#"Invoke Custom Function1", "Transform File")
+
+= Table.Skip(Source,3)
+
+= Table.Skip(Source,#"Calculated Minimum")
+
+= Table.ColumnNames(#"Promoted Headers")
+
+= Table.SelectColumns(#"Promoted Headers", #"Removed Bottom Items")
+
+= Table.UnpivotOtherColumns(Custom2, {"Salesman", "Product"}, "Attribute", "Value")
+
+= Table.UnpivotOtherColumns(Custom2, {"Salesman", "Product"}, "Month", "Sales")
+
+= Source{[Item="Report1",Kind="Sheet"]}[Data]
+
+= Table.ExpandTableColumn(#"Added Custom", "Player2", {"Name"}, {"Name"})
+
+= Table.ExpandTableColumn(#"Added Custom", "Player2", {"Name"}, {"Player2"})
+
+= Table.SelectRows(#"Expanded Player2", each [Player2] <> "1")
+
+= Table.SelectRows(#"Expanded Player2", each [Player2] <> [Player1])
+
+= Source[Name]
+
+= Excel.CurrentWorkbook(){[Name="tPlayers"]}[Content]
+
+= Excel.CurrentWorkbook(){[Name="tPlayers"]}[Content][Name]
+
+let
+    Source = Excel.CurrentWorkbook(){[Name="tPlayers"]}[Content][Name]
+in
+    Source
+
+let
+    Players = Excel.CurrentWorkbook(){[Name="tPlayers"]}[Content][Name]
+in
+    Players
+
+= List.Positions(Players)
+
+= List.Transform(Indexes, (i) => i + 1)
+
+= List.Transform(Indexes, (i) => List.Range(Indexes, i + 1, List.Count(Indexes) - i - 1))
+
+= List.Transform(Indexes, (i) => List.Transform( List.Range(Indexes, i + 1, List.Count(Indexes) - i - 1),(j) => Text.From(i) & "_" & Text.From(j)))
+
+[Player1=Players{i}, Player2=Players{j}]
+
+= List.Transform(Indexes, (i) => List.Transform( List.Range(Indexes, i + 1, List.Count(Indexes) - i - 1),(j) => [Player1=Players{i}, Player2=Players{j}]))
+
+= List.Combine(Matches)
+
+= Table.FromRecords(List.Combine(Matches))
+
+n! = n * (n – 1) * (n – 2) * … * 2 * 1
+
+(n as number) as number =>
+let
+        result = if n <= 1 then 1 else n * Factorial(n-1)
+in
+        result
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

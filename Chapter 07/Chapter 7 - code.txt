@@ -1,0 +1,43 @@
+if [Work Time] > #duration(0, 8, 0, 0) then "[Work Time] - 8:00" else 0
+
+if <test> then <result> else <alternative result>
+
+= Table.AddColumn(#"Inserted Total Hours", "OverTime", each if [Work Time] > #duration(0, 8, 0, 0) then [Work Time] - 8:00 else 0)
+
+= Table.AddColumn(#"Inserted Total Hours", "OverTime", each if [Work Time] > #duration(0, 8, 0, 0) then [Work Time] – "8:00" else 0)
+
+= Table.AddColumn(#"Inserted Total Hours", "OverTime", each if [Work Time] > #duration(0, 8, 0, 0) then [Work Time] - #duration(0, 8, 0, 0) else 0, type duration) 
+
+= Table.AddColumn(#"Inserted Total Hours", "OverTime", each if [Work Time] > #duration(0, 8, 0, 0) then [Work Time] - #duration(0, 8, 0, 0) else #duration(0, 0, 0, 0), type duration) 
+
+if [Total Hours] > 8 then [Total Hours] - 8 else 0
+
+if <test1 or test2> then <result> else <alternative result>
+
+if [Sales Quantity] > 60 or [Sales Value] > 8000 then "Bonus" else null
+
+if <test1 and test2> then <result> else <alternative result>
+
+if [Sales Quantity] > 50 and [Sales Value] > 7000 then "Bonus" else ""
+
+= Table.AddColumn(#"Changed Type", "Grade", each if [No. of points] >= 80 then "Good" else if [No. of points] >= 50 then "OK" else "Bad")
+
+{Number.From([Absence from work.1])..Number.From([Custom])}
+
+try Number.From([Deposit]) otherwise 0
+
+if [Client] = [Client.1] and [Date] - [Date.1] < #duration(14, 0, 0, 0) then "YES" else null
+
+if [Client] = [Client.1] and Duration.Days([Date] - [Date.1]) < 14 then "YES" else null
+
+= #"Changed Type"{2}[Income]
+
+= #"Changed Type"{[Index]}[Income]
+
+1 - #"Changed Type"{[Index]}[Income] / [Income]
+
+= Table.AddColumn(#"Added Index", "Change", each 1 - #"Changed Type"{[Index]}[Income] / [Income], Percentage.Type)
+
+try 1 - #"Changed Type"{[Index]}[Income] / [Income] otherwise 0
+
+try 1 - Types{[Index]}[Income] / [Income] otherwise 0

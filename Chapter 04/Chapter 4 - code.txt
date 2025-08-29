@@ -1,0 +1,18 @@
+= Table.Group(#"Changed Type", {"Merchant"}, {{"Sum", each List.Sum([Income]), type nullable number}, {"Average", each List.Average([Income]), type nullable number}, {"All", each _, type table [Date=nullable datetime, City=nullable text, Merchant=nullable text, Product=nullable text, Income=nullable number]}})
+
+= Table.Group(#"Changed Type", {"Merchant"}, {{"Sum", each List.Sum([Income]), type nullable Currency.Type}, {"Average", each List.Average([Income]), type nullable Currency.Type}, {"All", each _, type table [Date=nullable datetime, City=nullable text, Merchant=nullable text, Product=nullable text, Income=nullable number]}})
+
+= Table.Group(#"Changed Type", {"Merchant"}, {{"Sum", each List.Sum([Income]), type nullable Currency.Type}, {"Average", each List.Average([Income]), type nullable Currency.Type}, {"All", each [Product], type list}})
+
+= Table.AddIndexColumn(#"Sorted Rows", "Index", 1, 1, Int64.Type)
+
+= Table.AddIndexColumn(#"Sorted Rows", "Ranking", -1, 1.2, type number)
+
+= Table.Group(#"Changed Type", {"Merchant", "City"}, {{"Sum", each List.Sum([Income]), type nullable number}, {"# transactions", each Table.RowCount(Table.Distinct(_)), Int64.Type}, {"Most frequently sold", each List.Median([Product]), type nullable text}, {"Product list", each _, type table [Date=nullable datetime, Merchant=nullable text, City=nullable text, Product=nullable text, Income=nullable number]}})
+
+= Table.Group(#"Changed Type", {"Merchant", "City"}, {{"Sum", each List.Sum([Income]), type nullable number}, {"# transactions", each Table.RowCount(Table.Distinct(_)), Int64.Type}, {"Most frequently sold", each Text.Combine(List.Modes([Product]), ", "), type nullable text}, {"Product list", each _, type table [Date=nullable datetime, Merchant=nullable text, City=nullable text, Product=nullable text, Income=nullable number]}})
+
+= Table.Group(#"Changed Type", {"Merchant", "City"}, {{"Sum", each List.Sum([Income]), type nullable number}, {"# transactions", each Table.RowCount(Table.Distinct(_)), Int64.Type}, {"Most frequently sold", each Text.Combine(List.Modes([Product]), ", "), type nullable text}, {"Product list", each Text.Combine(List.Sort(List.Distinct([Product])), ", "), type nullable text}})
+
+= Table.Group(#"Changed Type", {"Weather"}, {{"Number of Days", each Table.RowCount(_), Int64.Type}, {"Min", each List.Min([Date]), type nullable date}, {"Max", each List.Max([Date]), type nullable date}})
+

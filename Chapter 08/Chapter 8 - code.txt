@@ -1,0 +1,114 @@
+= Source{4}[Feb]
+
+TableName {row index number}[ColumnName]
+
+= Excel.CurrentWorkbook(){[Name="tSales"]}[Content]
+
+TableName {[ColumnName1 = "search key"]}[ColumnName2]
+
+= Table.Keys(Source)
+
+= Table.AddKey(Source, {"ID"}, true)
+
+= Custom1{[ID=1011]}[Feb]
+
+= Custom1[[Feb]]
+
+= Custom1[[Mar],[Feb],[Jan]]
+
+= Custom1{4}
+
+= Custom1{4}[[Mar],[Feb],[Jan]]
+
+= Custom1{[Product="Train"]}[ID]
+
+= Custom1{[Product="Pony"]}[ID]
+
+= Custom1{[Product="car"]}[ID]
+
+= Table.SelectRows(#"Removed Columns", each [Continent] = Continent)
+
+= Excel.Workbook(File.Contents("D:\BPB\Chapter 8\FilePath\Sales.xlsx"), null, true)
+
+= Excel.Workbook(File.Contents(FilePath & "Sales.xlsx"), null, true)
+
+= Excel.Workbook(File.Contents(FilePath & "PriceList.xlsx"), null, true)
+
+"D:\BPB\Chapter 8\FilePath\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+D:\BPB\Chapter 8\FilePath\
+
+let
+    Source = "D:\BPB\Chapter 8\FilePath\"
+in
+    Source
+
+=LEFT(CELL("filename",A1),FIND("[",CELL("filename",A1))-1)
+
+= Excel.Workbook(File.Contents("D:\BPB\Chapter 8\FilePath2\" & "LargestCitiesWorld.xlsx"), null, true)
+
+= Source{0}[Value]
+
+= Source{[Name="Path"]}[Value]
+
+= Excel.Workbook(File.Contents(tParameters & "LargestCitiesWorld.xlsx"), null, true)
+
+= Excel.Workbook(File.Contents(Value & "LargestCitiesWorld.xlsx"), null, true)
+
+= tParameters
+
+let
+    Source = Excel.CurrentWorkbook(){[Name="tParameters"]}[Content],
+    Value = Source{[Name="Path"]}[Value]
+in
+    Value
+
+let
+    //
+    Source = Excel.CurrentWorkbook(){[Name="tParameters"]}[Content],
+    Value = Source{[Name="Path"]}[Value],
+    //
+    Source = Excel.Workbook(File.Contents(Path & "LargestCitiesWorld.xlsx"), null, true),
+    tLargestCities_Table = Source{[Item="tLargestCities",Kind="Table"]}[Data],
+    #"Changed Type" = Table.TransformColumnTypes(tLargestCities_Table,{{"No.", Int64.Type}, {"Name", type text}, {"ASCII Name", type text}, {"Country Code", type text}, {"Country name EN", type text}, {"Population", Int64.Type}, {"Continent", type text}, {"Timezone", type text}, {"Modification date", type date}, {"Latitude", type number}, {"Longitude", type number}}),
+    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"ASCII Name", "Country Code", "Timezone", "Modification date", "Latitude", "Longitude"})
+in
+    #"Removed Columns"
+
+// This is a single-row comment
+
+/* This is  
+   a comment in 
+   many rows */
+
+let
+    // This is a single-row comment
+    PathSource = Excel.CurrentWorkbook(){[Name="tParameters"]}[Content],
+    FilePath = PathSource{[Name="Path"]}[Value],
+    /* This is  
+       a comment in 
+    many rows */
+        Source = Excel.Workbook(File.Contents(FilePath & "LargestCitiesWorld.xlsx"), null, true),
+    tLargestCities_Table = Source{[Item="tLargestCities",Kind="Table"]}[Data],
+    #"Changed Type" = Table.TransformColumnTypes(tLargestCities_Table,{{"No.", Int64.Type}, {"Name", type text}, {"ASCII Name", type text}, {"Country Code", type text}, {"Country name EN", type text}, {"Population", Int64.Type}, {"Continent", type text}, {"Timezone", type text}, {"Modification date", type date}, {"Latitude", type number}, {"Longitude", type number}}),
+    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"ASCII Name", "Country Code", "Timezone", "Modification date", "Latitude", "Longitude"})
+in
+    #"Removed Columns"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
