@@ -1,2 +1,2 @@
-# Learning PowerQuery
-Learning PowerQuery, 
+# Learning Power Query
+Learning Power Query, by BPB Publications
